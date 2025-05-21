@@ -478,9 +478,6 @@ const TrialSection = () => {
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.5 }}
                   />
-                  <div className="absolute top-4 left-4 bg-secondary text-white px-4 py-2 rounded-full text-lg font-bold shadow-lg">
-                    Cours d'essai 100% gratuit !
-                  </div>
                 </div>
                 <p className="text-xl text-secondary font-semibold text-center mb-4">Essayez le taekwondo sans engagement&nbsp;: votre premier cours est offert&nbsp;!</p>
                 <ul className="space-y-4">
