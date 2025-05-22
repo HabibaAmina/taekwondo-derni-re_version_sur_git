@@ -78,7 +78,7 @@ const HeroSection = ({
               {/* Slide 1: Video */}
               <div className="min-w-full h-full relative flex-shrink-0">
                 <video ref={videoRef} className="w-full h-full object-cover" muted loop playsInline preload="auto" aria-label="Vidéo de présentation du club de Taekwondo">
-                  <source src="https://videos.pexels.com/video-files/6005335/6005335-hd_1920_1080_25fps.mp4" type="video/mp4" />
+                  <source src="https://media.istockphoto.com/id/1678315078/fr/vid%C3%A9o/entra%C3%AEnement-de-karat%C3%A9-enfants-de-diff%C3%A9rents-%C3%A2ges-en-kimono.mp4?s=mp4-640x640-is&k=20&c=S5zd5lPP4JolioCMevu_v1FvXVGGiKCtX3moKQcK3EQ=" type="video/mp4" />
                   <source src="https://media.istockphoto.com/id/1678602046/fr/vid%C3%A9o/entra%C3%AEnement-de-karat%C3%A9-enfants-de-diff%C3%A9rents-%C3%A2ges-en-kimono.mp4?s=mp4-480x480-is&k=20&c=XyIQNYkH0BtNS_fwnrCSqhZehX46N8OdmWjwqHlJ83M=" type="video/mp4" />
                 </video>
               </div>
@@ -91,7 +91,7 @@ const HeroSection = ({
               {/* Slide 3: Video */}
               <div className="min-w-full h-full relative flex-shrink-0">
                 <video ref={videoRef2} className="w-full h-full object-cover" muted loop playsInline preload="auto" aria-label="Vidéo de présentation du club de Taekwondo">
-                  <source src="https://media.istockphoto.com/id/1678315078/fr/vid%C3%A9o/entra%C3%AEnement-de-karat%C3%A9-enfants-de-diff%C3%A9rents-%C3%A2ges-en-kimono.mp4?s=mp4-640x640-is&k=20&c=S5zd5lPP4JolioCMevu_v1FvXVGGiKCtX3moKQcK3EQ=" type="video/mp4" />
+                  <source src="https://videos.pexels.com/video-files/6005335/6005335-hd_1920_1080_25fps.mp4" type="video/mp4" />
                 </video>
               </div>
               

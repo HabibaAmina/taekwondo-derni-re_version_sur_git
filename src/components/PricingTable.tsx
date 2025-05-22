@@ -193,7 +193,7 @@ const PricingTable = () => {
       variants={containerVariants}
       initial="hidden"
       animate={inView ? 'visible' : 'hidden'}
-      className="space-y-8"
+      className="space-y-6 sm:space-y-8 px-2 sm:px-0"
     >
       {pricingData.map((club, clubIndex) => (
         <motion.div
@@ -201,34 +201,34 @@ const PricingTable = () => {
           variants={itemVariants}
           className="bg-white rounded-lg shadow-lg overflow-hidden"
         >
-          <div className="bg-primary text-white p-4">
-            <h3 className="text-xl font-bold">{club.club}</h3>
+          <div className="bg-primary text-white p-3 sm:p-4">
+            <h3 className="text-lg sm:text-xl font-bold">{club.club}</h3>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
+          <div className="overflow-x-auto -mx-2 sm:mx-0">
+            <table className="min-w-full border-separate border-spacing-0">
+              <thead>
                 <tr>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Âge</th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Horaires</th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Lieu</th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Tarifs</th>
+                  <th className="sticky top-0 px-2 sm:px-4 py-2 sm:py-3 bg-gray-100 text-left text-xs sm:text-sm font-semibold text-gray-900">Age</th>
+                  <th className="sticky top-0 px-2 sm:px-4 py-2 sm:py-3 bg-gray-100 text-left text-xs sm:text-sm font-semibold text-gray-900">Horaires</th>
+                  <th className="sticky top-0 px-2 sm:px-4 py-2 sm:py-3 bg-gray-100 text-left text-xs sm:text-sm font-semibold text-gray-900">Lieu</th>
+                  <th className="sticky top-0 px-2 sm:px-4 py-2 sm:py-3 bg-gray-100 text-left text-xs sm:text-sm font-semibold text-gray-900">Prix</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody>
                 {club.groups.map((group, groupIndex) => (
                   <motion.tr
                     key={groupIndex}
                     variants={itemVariants}
                     className="hover:bg-gray-50 transition-colors"
                   >
-                    <td className="px-4 py-3 text-sm text-gray-900">{group.age}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">
+                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-gray-900 whitespace-normal">{group.age}</td>
+                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-gray-900">
                       {group.schedule.map((time, index) => (
-                        <div key={index}>{time}</div>
+                        <div key={index} className="whitespace-normal">{time}</div>
                       ))}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{group.location}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">
+                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-gray-900 whitespace-normal">{group.location}</td>
+                    <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-gray-900">
                       {group.isExtra ? `+${group.price} €` : `${group.price} €`}
                     </td>
                   </motion.tr>

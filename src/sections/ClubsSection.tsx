@@ -194,9 +194,7 @@ const ClubsSection = ({ trialRef, scrollToSection }: ClubsSectionProps) => {
               {club.shortName}
             </motion.button>
           ))}
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        </div>          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12 container mx-auto">
           {/* Redesigned Paris Metro Style Map */}
           <motion.div
             className="bg-white rounded-lg shadow-md p-6 h-[620px] overflow-hidden"

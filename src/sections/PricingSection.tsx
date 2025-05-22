@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { FaInfoCircle, FaBaby, FaChild, FaUserGraduate, FaUserTie, FaStar } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaInfoCircle, FaBaby, FaChild, FaUserGraduate, FaUserTie } from 'react-icons/fa';
 import { useState } from 'react';
 import { IconType } from 'react-icons';
 import { useInView } from 'react-intersection-observer';
@@ -7,10 +7,9 @@ import { useInView } from 'react-intersection-observer';
 interface Club {
   id: string;
   name: string;
-}
-
-type CourseType = 'baby_3' | 'baby_4' | 'baby_3_5' | 'enfants_5_6' | 'enfants_6_9' | 
-  'enfants_7_8' | 'enfants_9_10' | 'ados_10_17' | 'ados_11_16' | 'adultes' | 'enfants_5_11' | 'ados_12_plus';
+}  type CourseType = 'baby_3' | 'baby_4' | 'baby_3_5' | 'enfants_5_6' | 'enfants_6_9' | 
+  'enfants_7_8' | 'enfants_9_10' | 'ados_10_17' | 'ados_11_16' | 'adultes' | 'enfants_5_11' | 'ados_12_17' |
+  'info_mjc' | 'planning';
 
 interface ClubCourseTypes {
   [key: string]: CourseType[];
@@ -27,6 +26,16 @@ interface PricingOption {
   };
 }
 
+interface SupplementData {
+  price?: number;
+  schedule?: string;
+  note?: string;
+}
+
+interface SupplementsData {
+  [key: string]: SupplementData;
+}
+
 const PricingSection: React.FC = () => {
   const [ref, inView] = useInView({
     triggerOnce: true,
@@ -34,7 +43,6 @@ const PricingSection: React.FC = () => {
   });
 
   const [selectedClub, setSelectedClub] = useState<string>('villebon');
-  const [previousClub, setPreviousClub] = useState<string>('villebon');
 
   const clubs: Club[] = [
     { id: 'villebon', name: 'ATP Villebon-sur-Yvette' },
@@ -45,43 +53,47 @@ const PricingSection: React.FC = () => {
     { id: 'ulis', name: 'ATP Les Ulis' },
   ];
 
-  // Mapping des catégories d'âge disponibles par club
+  // Mettre à jour les types de cours disponibles pour Palaiseau et Magny
   const clubCourseTypes: ClubCourseTypes = {
     'villebon': ['baby_3_5', 'enfants_6_9', 'ados_10_17'],
-    'palaiseau': [],
     'longjumeau': ['baby_3_5', 'enfants_6_9', 'ados_10_17'],
-    'saint-remy': ['enfants_5_11', 'ados_12_plus'],
-    'magny': [],
-    'ulis': ['baby_3', 'baby_4', 'enfants_5_6', 'enfants_7_8', 'enfants_9_10', 'ados_11_16', 'adultes']
+    'saint-remy': ['enfants_5_11', 'ados_12_17'],
+    'ulis': ['baby_3', 'baby_4', 'enfants_5_6', 'enfants_7_8', 'enfants_9_10', 'ados_11_16', 'adultes'],
+    'palaiseau': ['info_mjc'],
+    'magny': ['planning']
   };
 
   const pricingOptions: PricingOption[] = [
+    {
+      id: 'info_mjc',
+      name: 'Information MJC',
+      ageRange: 'Tous âges',
+      icon: FaInfoCircle,
+      prices: {
+        'palaiseau': 0
+      }
+    },
+    {
+      id: 'planning',
+      name: 'En cours de planification',
+      ageRange: 'Tous âges',
+      icon: FaInfoCircle,
+      prices: {
+        'magny': 0
+      }
+    },
     {
       id: 'enfants_5_11',
       name: 'Enfants',
       ageRange: '5-11 ans',
       icon: FaChild,
       prices: {
-        'villebon': 225,
+        'villebon': 0,
         'palaiseau': 0,
-        'longjumeau': 225,
+        'longjumeau': 0,
         'saint-remy': 225,
         'magny': 0,
-        'ulis': 225
-      }
-    },
-    {
-      id: 'ados_12_plus',
-      name: 'Adolescents',
-      ageRange: '12-17 ans',
-      icon: FaUserGraduate,
-      prices: {
-        'villebon': 245,
-        'palaiseau': 0,
-        'longjumeau': 245,
-        'saint-remy': 245,
-        'magny': 0,
-        'ulis': 245
+        'ulis': 0
       }
     },
     {
@@ -95,18 +107,18 @@ const PricingSection: React.FC = () => {
         'longjumeau': 185,
         'saint-remy': 0,
         'magny': 0,
-        'ulis': 185
+        'ulis': 0
       }
     },
     {
       id: 'baby_3',
-      name: 'Baby Taekwondo 3 ans',
+      name: 'Baby Taekwondo',
       ageRange: '3 ans',
       icon: FaBaby,
       prices: {
-        'villebon': 185,
+        'villebon': 0,
         'palaiseau': 0,
-        'longjumeau': 185,
+        'longjumeau': 0,
         'saint-remy': 0,
         'magny': 0,
         'ulis': 185
@@ -114,30 +126,16 @@ const PricingSection: React.FC = () => {
     },
     {
       id: 'baby_4',
-      name: 'Baby Taekwondo 4 ans',
+      name: 'Baby Taekwondo',
       ageRange: '4 ans',
       icon: FaBaby,
       prices: {
-        'villebon': 185,
+        'villebon': 0,
         'palaiseau': 0,
-        'longjumeau': 185,
+        'longjumeau': 0,
         'saint-remy': 0,
         'magny': 0,
         'ulis': 185
-      }
-    },
-    {
-      id: 'enfants_6_9',
-      name: 'Enfants',
-      ageRange: '6-9 ans',
-      icon: FaChild,
-      prices: {
-        'villebon': 225,
-        'palaiseau': 0,
-        'longjumeau': 225,
-        'saint-remy': 0,
-        'magny': 0,
-        'ulis': 0
       }
     },
     {
@@ -183,6 +181,20 @@ const PricingSection: React.FC = () => {
       }
     },
     {
+      id: 'enfants_6_9',
+      name: 'Enfants',
+      ageRange: '6-9 ans',
+      icon: FaChild,
+      prices: {
+        'villebon': 225,
+        'palaiseau': 0,
+        'longjumeau': 225,
+        'saint-remy': 0,
+        'magny': 0,
+        'ulis': 0
+      }
+    },
+    {
       id: 'ados_10_17',
       name: 'Adolescents',
       ageRange: '10-17 ans',
@@ -192,6 +204,20 @@ const PricingSection: React.FC = () => {
         'palaiseau': 0,
         'longjumeau': 245,
         'saint-remy': 0,
+        'magny': 0,
+        'ulis': 0
+      }
+    },
+    {
+      id: 'ados_12_17',
+      name: 'Adolescents',
+      ageRange: '12-17 ans',
+      icon: FaUserGraduate,
+      prices: {
+        'villebon': 0,
+        'palaiseau': 0,
+        'longjumeau': 0,
+        'saint-remy': 245,
         'magny': 0,
         'ulis': 0
       }
@@ -219,12 +245,21 @@ const PricingSection: React.FC = () => {
         'villebon': 245,
         'palaiseau': 0,
         'longjumeau': 245,
-        'saint-remy': 245,
+        'saint-remy': 0,
         'magny': 0,
         'ulis': 265
       }
     }
   ];
+
+  const supplementsData: SupplementsData = {
+    'villebon': { price: 95, schedule: 'Pour compétiteurs et ados : Samedi 18h00-20h00' },
+    'longjumeau': { price: 75, schedule: 'Pour compétiteurs confirmés : 1er dimanche du mois 14h30-16h30' },
+    'ulis': { price: 80, schedule: 'Pour compétiteurs : Dimanche 14h30-17h30', note: '(sur sélection)' },
+    'palaiseau': { note: 'Pour plus d\'informations sur les tarifs, consultez le site de la MJC Palaiseau.' },
+    'magny': { note: 'Cours en cours de planification.' },
+    'saint-remy': { note: 'Prochainement ...' }
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -247,12 +282,11 @@ const PricingSection: React.FC = () => {
         type: 'spring',
         stiffness: 100,
         damping: 20,
-        mass: 1,
-        velocity: 2
+        mass: 1
       }
     },
     hover: {
-      scale: 1.03,
+      scale: 1.05,
       y: -10,
       transition: {
         type: 'spring',
@@ -262,267 +296,219 @@ const PricingSection: React.FC = () => {
     }
   };
 
-  const iconVariants = {
-    hidden: { scale: 0, rotate: -180 },
+  const supplementVariants = {
+    hidden: { opacity: 0, y: 20 },
     visible: {
-      scale: 1,
-      rotate: 0,
+      opacity: 1,
+      y: 0,
       transition: {
-        type: 'spring',
-        stiffness: 200,
-        damping: 20
-      }
-    },
-    hover: {
-      rotate: 360,
-      transition: {
-        duration: 0.6,
-        ease: 'easeInOut'
+        duration: 0.4,
+        ease: "easeOut"
       }
     }
   };
 
-
-
   return (
-    <section className="py-20 bg-primary text-white" id="pricing">
-      <div className="container mx-auto px-4">
+    <section className="py-16 bg-gradient-to-br from-primary via-gray-800 to-gray-900 text-white overflow-hidden relative" id="pricing">
+      {/* Décorations d'arrière-plan */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+        <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-radial from-secondary/30 to-transparent transform rotate-45"></div>
+        <div className="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-radial from-secondary/30 to-transparent transform -rotate-45"></div>
+      </div>
+
+      <div className="container mx-auto px-4 relative">
         <motion.div
           ref={ref}
           className="text-center mb-16"
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, ease: "easeOut" }}
         >
-          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">Tarifs</h2>
-          <div className="w-20 h-1 bg-secondary mx-auto mb-6"></div>
-          <p className="text-gray-300 max-w-2xl mx-auto">
-            Découvrez nos formules conçues pour chaque tranche d'âge. Nos tarifs sont pensés pour permettre à chacun de pratiquer le Taekwondo dans les meilleures conditions.
+          <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300">
+              Tarifs
+            </span>
+          </h2>
+          <div className="w-24 h-1 bg-gradient-to-r from-secondary to-secondary/50 mx-auto mb-6 rounded-full"></div>
+          <p className="text-gray-300 max-w-2xl mx-auto text-lg">
+            Des formules adaptées à chaque âge pour pratiquer le Taekwondo dans les meilleures conditions.
           </p>
         </motion.div>
 
         {/* Grille d'informations */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          {/* Bloc d'informations communes */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 max-w-4xl mx-auto">
+          {/* Premier bloc - Inclus */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
+            initial={{ opacity: 0, x: -50 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.5 }}
-            className="text-center bg-gray-800 rounded-xl p-6"
+            className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 rounded-xl p-4 backdrop-blur-sm border border-gray-700/50"
           >
-            <h3 className="text-xl font-semibold mb-4">Inclus dans tous nos tarifs</h3>
+            <h3 className="text-xl font-semibold mb-4 text-center">Ce que comprend votre adhésion</h3>
+            <p className="text-sm text-gray-400 mb-4 text-center italic">Note : Tarifs hors licence fédérale FFTDA (36€)</p>
             <div className="grid grid-cols-1 gap-4">
-              <div className="flex items-center justify-center space-x-2">
-                <FaInfoCircle className="text-secondary text-xl" />
-                <span>Licence FFTDA</span>
-              </div>
-              <div className="flex items-center justify-center space-x-2">
-                <FaInfoCircle className="text-secondary text-xl" />
-                <span>Assurance</span>
-              </div>
-              <div className="flex items-center justify-center space-x-2">
-                <FaInfoCircle className="text-secondary text-xl" />
-                <span>Accès aux compétitions</span>
-              </div>
+              {[
+                { icon: FaInfoCircle, text: "Assurance du club" },
+                { icon: FaInfoCircle, text: "Cours hebdomadaires" },
+                { icon: FaInfoCircle, text: "Accès aux passages de grades" },
+              ].map((item, index) => (
+                <motion.div
+                  key={index}
+                  className="flex items-center space-x-3"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={inView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ delay: index * 0.2 }}
+                >
+                  <div className="p-2 bg-secondary/20 rounded-lg">
+                    <item.icon className="text-secondary text-lg" />
+                  </div>
+                  <span className="text-gray-200 text-sm">{item.text}</span>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
 
-          {/* Bloc des suppléments compétiteurs */}
+          {/* Deuxième bloc - Suppléments */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-center bg-secondary rounded-xl p-6"
+            initial={{ opacity: 0, x: 50 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.5 }}
+            className="bg-gradient-to-br from-blue-500/20 to-gray-900/80 rounded-xl p-6 backdrop-blur-sm border border-blue-500/30"
           >
-            <h3 className="text-xl font-semibold mb-4">Suppléments Compétiteurs</h3>
-            <div className="grid grid-cols-1 gap-4">
-              {selectedClub === 'villebon' && (
-                <div>
-                  <p className="text-lg font-bold">+95€</p>
-                  <p className="text-sm">Samedi 18h00-20h00</p>
-                </div>
-              )}
-              {selectedClub === 'longjumeau' && (
-                <div>
-                  <p className="text-lg font-bold">+75€</p>
-                  <p className="text-sm">1er dimanche du mois 14h30-16h30</p>
-                </div>
-              )}
-              {selectedClub === 'ulis' && (
-                <div>
-                  <p className="text-lg font-bold">+80€</p>
-                  <p className="text-sm">Dimanche 14h30-17h30</p>
-                  <p className="text-xs italic">(sur sélection)</p>
-                </div>
-              )}
-              {selectedClub === 'palaiseau' && (
-                <div>
-                  <p className="text-sm">Pour plus d'informations sur les tarifs,<br/>consultez le site de la MJC</p>
-                </div>
-              )}
-              {selectedClub === 'saint-remy' && (
-                <div>
-                  <p className="text-lg font-bold">+90€</p>
-                </div>
-              )}
-              {selectedClub === 'magny' && (
-                <div>
-                  <p className="text-sm">Cours en cours de planification</p>
-                </div>
-              )}
-              {!['villebon', 'longjumeau', 'ulis', 'palaiseau', 'saint-remy', 'magny'].includes(selectedClub) && (
-                <div className="text-gray-200">
-                  <p>Sélectionnez un club pour voir les suppléments</p>
-                </div>
-              )}
-            </div>
+            <h3 className="text-xl font-semibold mb-4 text-center">Suppléments Compétiteurs</h3>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={selectedClub}
+                variants={supplementVariants}
+                initial="hidden"
+                animate="visible"
+                className="text-center"
+              >
+                {supplementsData[selectedClub]?.price ? (
+                  <motion.div
+                    className="mb-3"
+                    initial={{ scale: 0.9 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <span className="text-4xl font-bold bg-gradient-to-r from-blue-300 to-blue-500 bg-clip-text text-transparent">
+                      +{supplementsData[selectedClub].price}€
+                    </span>
+                    <span className="text-gray-300 text-lg ml-2">/an</span>
+                  </motion.div>
+                ) : null}
+                
+                {supplementsData[selectedClub]?.schedule ? (
+                  <motion.p 
+                    className="text-base text-gray-200 mb-2"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    {supplementsData[selectedClub].schedule}
+                  </motion.p>
+                ) : null}
+                
+                {supplementsData[selectedClub]?.note ? (
+                  <motion.p 
+                    className="text-sm text-gray-400 italic whitespace-pre-line"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                  >
+                    {supplementsData[selectedClub].note}
+                  </motion.p>
+                ) : null}
+              </motion.div>
+            </AnimatePresence>
           </motion.div>
         </div>
 
-        {/* Club selector */}
-        <div className="mb-4">
-          <div className="flex flex-wrap justify-center gap-4">
+        {/* Sélecteur de club */}
+        <div className="mb-12">
+          <div className="flex flex-wrap justify-center gap-2">
             {clubs.map((club) => (
-              <button
+              <motion.button
                 key={club.id}
-                onClick={() => {
-                  setPreviousClub(selectedClub);
-                  setSelectedClub(club.id);
-                }}
-                className={`px-6 py-2 rounded-full transition-all ${selectedClub === club.id ? 'bg-secondary text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+                onClick={() => setSelectedClub(club.id)}
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                className={`px-4 py-2 text-sm md:text-base rounded-xl transition-all duration-200 ${
+                  selectedClub === club.id
+                    ? 'bg-secondary text-white shadow-lg shadow-secondary/30'
+                    : 'bg-gray-800/80 text-gray-300 hover:bg-gray-700/80 hover:text-white'
+                }`}
               >
                 {club.name}
-              </button>
+              </motion.button>
             ))}
           </div>
         </div>
 
-        {/* Pricing cards */}
+        {/* Grille des cartes de prix */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 auto-rows-fr"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 max-w-7xl mx-auto"
         >
-          {/* Affiche la carte spéciale pour Palaiseau si sélectionné */}
-          {selectedClub === 'palaiseau' && (
-            <motion.div
-              variants={cardVariants}
-              initial="hidden"
-              animate="visible"
-              className="relative bg-white rounded-xl overflow-hidden shadow-lg flex flex-col h-full"
-            >
-              <div className="bg-gray-900 p-6 text-center">
-                <motion.div 
-                  className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary mb-4"
-                  variants={iconVariants}
-                >
-                  <FaInfoCircle className="text-4xl text-secondary" />
-                </motion.div>
-                <h3 className="text-xl font-bold mb-2">ATP Palaiseau</h3>
-                <p className="text-gray-400">Cours en cours de planification</p>
-              </div>
-              <div className="flex-grow p-8 flex flex-col items-center justify-center">
-                <div className="text-center">
-                  <p className="text-xl font-semibold text-secondary mb-6">
-                    Pour plus d'informations sur les tarifs,<br/>
-                    consultez le site de la MJC
-                  </p>
-                  <a href="https://www.mjcpalaiseau.com" 
-                     target="_blank" 
-                     rel="noopener noreferrer" 
-                     className="inline-block bg-secondary text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-all duration-300 font-medium">
-                    Accéder au site MJC
-                  </a>
-                </div>
-              </div>
-            </motion.div>
-          )}
-          {/* Affiche la carte spéciale pour Magny si sélectionné */}
-          {selectedClub === 'magny' && (
-            <motion.div
-              variants={cardVariants}
-              initial="hidden"
-              animate="visible"
-              className="relative bg-white rounded-xl overflow-hidden shadow-lg flex flex-col h-full"
-            >
-              <div className="bg-gray-900 p-6 text-center">
-                <motion.div 
-                  className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary mb-4"
-                  variants={iconVariants}
-                >
-                  <FaInfoCircle className="text-4xl text-secondary" />
-                </motion.div>
-                <h3 className="text-xl font-bold mb-2">ATP Magny-les-Hameaux</h3>
-                <p className="text-gray-400">Cours en cours de planification</p>
-              </div>
-              <div className="flex-grow p-8 flex items-center justify-center">
-                <p className="text-xl font-semibold text-secondary text-center">
-                  Cours en cours de planification
-                </p>
-              </div>
-            </motion.div>
-          )}
-          {/* Affiche les autres cartes tarifs */}
           {pricingOptions
             .filter(option => clubCourseTypes[selectedClub]?.includes(option.id))
             .map((option) => {
               const IconComponent = option.icon;
-              return (                <motion.div
+              return (
+                <motion.div
                   key={option.id}
                   variants={cardVariants}
-                  initial="hidden"
-                  animate="visible"
-                  className="relative bg-white rounded-xl overflow-hidden shadow-lg flex flex-col min-h-[400px] flex-grow"
                   whileHover="hover"
+                  className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-xl overflow-hidden shadow-xl backdrop-blur-sm border border-gray-700/50"
                 >
-                  <div className="bg-gray-900 p-6 text-center relative">{option.id === 'adultes' && selectedClub !== 'ulis' && selectedClub !== 'longjumeau' && (
-                      <div className="absolute top-2 right-2 bg-secondary text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center">
-                        <FaStar className="mr-1" />
-                        Populaire
-                      </div>
-                    )}
-                    <motion.div 
-                      className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary mb-4"
-                      variants={iconVariants}
+                  <div className="p-4 text-center border-b border-gray-700/50">
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 360 }}
+                      transition={{ duration: 0.6 }}
+                      className="w-14 h-14 mx-auto mb-3 p-3 rounded-full bg-[#3498DB] flex items-center justify-center shadow-lg shadow-[#3498DB]/50"
                     >
-                      <IconComponent className="text-4xl text-secondary" />
+                      <IconComponent className="w-8 h-8 text-white" />
                     </motion.div>
-                    <h3 className="text-xl font-bold mb-2">{option.name}</h3>
-                    <p className="text-gray-400">{option.ageRange}</p>
+                    <h3 className="text-xl font-bold mb-1">{option.name}</h3>
+                    <p className="text-gray-400 text-sm">{option.ageRange}</p>
                   </div>
-                  <div className="flex-grow p-8 flex flex-col items-center justify-center">
-                    <motion.div 
-                      className="text-center mb-6"
-                      initial={{ scale: 1 }}
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ type: 'spring', stiffness: 400 }}
+                  
+                  <div className="p-4 flex flex-col justify-between bg-white">
+                    <div className="text-center mb-4">
+                      {selectedClub === 'palaiseau' ? (
+                        <p className="text-gray-600 text-base">Pour plus d'informations sur les tarifs, consultez le site de la MJC Palaiseau</p>
+                      ) : selectedClub === 'magny' ? (
+                        <p className="text-gray-600 text-base">Cours en cours de planification</p>
+                      ) : (
+                        <>
+                          <div className="mb-1">
+                            <span className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                              {option.prices[selectedClub]}€
+                            </span>
+                          </div>
+                          <div className="text-gray-600 text-base">par an</div>
+                        </>
+                      )}
+                    </div>
+                    
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="bg-gradient-to-r from-primary to-secondary text-white w-full py-3 rounded-lg hover:shadow-lg transition-all duration-300"
+                      onClick={() => selectedClub === 'palaiseau' 
+                        ? window.open('https://www.mjcpalaiseau.com', '_blank')
+                        : window.location.href = '#registration'
+                      }
                     >
-                      <motion.p 
-                        key={selectedClub}
-                        initial={{ y: previousClub === selectedClub ? 0 : 20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ y: -20, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: "easeOut" }}
-                        className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
-                      >
-                        {`${option.prices[selectedClub]}€`}
-                      </motion.p>
-                      <p className="text-gray-600 mt-2 font-medium">par an</p>
-                    </motion.div>
-                    <button 
-                      onClick={() => window.location.href = '#registration'}
-                      className="bg-secondary text-white w-full py-3 rounded-lg hover:bg-opacity-90 transition-all duration-300"
-                    >
-                      S'inscrire
-                    </button>
+                      {selectedClub === 'palaiseau' ? 'Accéder au site MJC' : "S'inscrire maintenant"}
+                    </motion.button>
                   </div>
                 </motion.div>
               );
             })}
         </motion.div>
-
-
       </div>
     </section>
   );

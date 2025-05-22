@@ -10,6 +10,18 @@ const ContactSection = () => {
     threshold: 0.1,
   });
 
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: 'spring',
+        stiffness: 100
+      }
+    }
+  };
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -97,83 +109,114 @@ const ContactSection = () => {
       <div className="container mx-auto px-4">
         <motion.div
           ref={ref}
-          className="text-center mb-16"
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
+          className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">Contactez-nous</h2>
-          <div className="w-20 h-1 bg-secondary mx-auto mb-6"></div>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Une question ? Un besoin d'information ? N'hésitez pas à nous contacter. Notre équipe vous répondra dans les plus brefs délais.
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <motion.div
-            className="lg:col-span-2"
-            initial={{ opacity: 0, x: -50 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.2 }}
+          {/* Contact Information */}
+          <motion.div 
+            className="bg-primary text-white p-4 sm:p-6 rounded-lg shadow-md"
+            variants={itemVariants}
           >
-            <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <h3 className="text-xl sm:text-2xl font-bold mb-4">Contactez-nous</h3>
+            <div className="space-y-4">
+              <div className="flex items-start space-x-4">
+                <FaMapMarkerAlt className="text-secondary text-xl mt-1" />
                 <div>
-                  <label htmlFor="name" className="block text-gray-700 font-medium mb-2">Nom complet</label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="Votre Nom et Votre Prénom"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-gray-700 font-medium mb-2">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="votre@email.com"
-                  />
+                  <h4 className="font-semibold mb-1">Adresse</h4>
+                  <p className="text-gray-300 text-sm sm:text-base">12 Avenue des Sports, 75001 Paris</p>
                 </div>
               </div>
-
-              <div className="mb-6">
-                <label htmlFor="subject" className="block text-gray-700 font-medium mb-2">Sujet</label>
+              <div className="flex items-start space-x-4">
+                <FaPhone className="text-secondary text-xl mt-1" />
+                <div>
+                  <h4 className="font-semibold mb-1">Téléphone</h4>
+                  <p className="text-gray-300 text-sm sm:text-base">01 23 45 67 89</p>
+                </div>
+              </div>
+              <div className="flex items-start space-x-4">
+                <FaEnvelope className="text-secondary text-xl mt-1" />
+                <div>
+                  <h4 className="font-semibold mb-1">Email</h4>
+                  <p className="text-gray-300 text-sm sm:text-base">contact@atp-taekwondo.fr</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="mt-6">
+              <h4 className="font-semibold mb-3">Horaires d'ouverture</h4>
+              <ul className="space-y-2 text-sm sm:text-base text-gray-300">
+                <li>Lundi - Vendredi: 10h - 19h</li>
+                <li>Samedi: 10h - 18h</li>
+                <li>Dimanche: Fermé</li>
+              </ul>
+            </div>
+          </motion.div>
+          
+          {/* Contact Form */}
+          <motion.div 
+            className="bg-white p-4 sm:p-6 rounded-lg shadow-md"
+            variants={itemVariants}
+          >
+            <h3 className="text-xl sm:text-2xl font-bold mb-4">Envoyez-nous un message</h3>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="name">
+                  Nom complet
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm sm:text-base"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="email">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm sm:text-base"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="subject">
+                  Sujet
+                </label>
                 <input
                   type="text"
                   id="subject"
                   name="subject"
                   value={formData.subject}
                   onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm sm:text-base"
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="Sujet de votre message"
                 />
               </div>
-
-              <div className="mb-6">
-                <label htmlFor="message" className="block text-gray-700 font-medium mb-2">Message</label>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="message">
+                  Message
+                </label>
                 <textarea
                   id="message"
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm sm:text-base resize-none"
+                  rows={4}
                   required
-                  rows={6}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-                  placeholder="Votre message"
                 ></textarea>
               </div>
-
               <button
                 type="submit"
                 disabled={status.submitting}
@@ -194,60 +237,7 @@ const ContactSection = () => {
               )}
             </form>
           </motion.div>
-
-          <motion.div
-            className="bg-primary text-white rounded-lg shadow-md p-8"
-            initial={{ opacity: 0, x: 50 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            <h3 className="text-2xl font-bold mb-6">Informations de contact</h3>
-            
-            <div className="space-y-6">
-              <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0">
-                  <FaEnvelope className="text-2xl text-secondary" />
-                </div>
-                <div>
-                  <h4 className="font-medium mb-1">Email</h4>
-                  <p className="text-gray-300">zineb2019achraf@gmail.com</p>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0">
-                  <FaPhone className="text-2xl text-secondary" />
-                </div>
-                <div>
-                  <h4 className="font-medium mb-1">Téléphone</h4>
-                  <p className="text-gray-300">+33 6 XX XX XX XX</p>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0">
-                  <FaMapMarkerAlt className="text-2xl text-secondary" />
-                </div>
-                <div>
-                  <h4 className="font-medium mb-1">Adresse</h4>
-                  <p className="text-gray-300">
-                    123 Rue du Taekwondo<br />
-                    75000 Paris, France
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8 p-6 bg-white/10 rounded-lg">
-              <h4 className="font-medium mb-4">Horaires d'ouverture</h4>
-              <ul className="space-y-2 text-gray-300">
-                <li>Lundi - Vendredi: 9h00 - 20h00</li>
-                <li>Samedi: 10h00 - 18h00</li>
-                <li>Dimanche: Fermé</li>
-              </ul>
-            </div>
-          </motion.div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

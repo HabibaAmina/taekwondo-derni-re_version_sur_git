@@ -28,10 +28,7 @@ export const clubsData = [
     email: "palaiseau@atp-taekwondo.fr",
     description: "Le club de Palaiseau, ouvert en 2012, est notre centre spécialisé dans la formation des jeunes talents.",
     schedule: [
-      "Baby TKD (3-5 ans): Lundi 17h-18h",
-      "Enfants (6-9 ans): Lundi 18h-19h et Jeudi 17h-19h",
-      "Ados (10-17 ans): Lundi 18h-19h et Jeudi 18h-19h",
-      "Compétiteurs: Uniquement sur sélection (Samedi 18h-20h)"
+      "Pour toute information sur les horaires, veuillez consulter le site de la MJC Palaiseau"
     ],
     instructors: ["Maître Lee", "Coach Thomas"],
     facilities: ["2 Dojangs", "Vestiaires", "Salle de musculation"]
@@ -80,10 +77,7 @@ export const clubsData = [
     email: "magny@atp-taekwondo.fr",
     description: "Le club de Magny-les-Hameaux, notre plus récent dojang ouvert en 2018, combine tradition et modernité.",
     schedule: [
-      "Baby TKD (3-5 ans): Lundi 17h-18h",
-      "Enfants (6-9 ans): Lundi 18h-19h et Jeudi 17h-19h",
-      "Ados (10-17 ans): Lundi 18h-19h et Jeudi 18h-19h",
-      "Compétiteurs: Uniquement sur sélection (Samedi 18h-20h)"
+      "En cours de planification"
     ],
     instructors: ["Maître Yoo", "Coach Emma"],
     facilities: ["2 Dojangs", "Vestiaires", "Salle d'étirement"]

@@ -474,7 +474,7 @@ const TrialSection = () => {
                   <motion.img 
                     src="https://v2.taekwondo-vincennes.com/wp-content/uploads/2021/09/cropped-cropped-IMG_4472.jpg"
                     alt="Cours d'essai gratuit de taekwondo"
-                    className="w-full h-auto rounded-lg shadow-lg border-4 border-secondary"
+                    className="w-full h-auto rounded-lg shadow-lg"
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.5 }}
                   />

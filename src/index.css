@@ -9,6 +9,14 @@
 /* Base responsive styles */
 html {
   scroll-behavior: smooth;
+  font-size: 16px; /* Base font size */
+}
+
+/* Responsive typography */
+@media (max-width: 640px) {
+  html {
+    font-size: 14px; /* Slightly smaller base font size for mobile */
+  }
 }
 
 /* Improved mobile styles */
@@ -18,8 +26,21 @@ html {
     padding-right: 1rem;
   }
   
-  h1, h2, h3 {
-    word-break: break-word;
+  h1 {
+    font-size: 2rem;
+  }
+  
+  h2 {
+    font-size: 1.75rem;
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+  }
+  
+  p, li {
+    font-size: 1rem;
+    line-height: 1.6;
   }
 }
 
@@ -28,13 +49,24 @@ body {
   overflow-x: hidden;
   position: relative;
   width: 100%;
+  -webkit-text-size-adjust: 100%;
 }
 
-/* Fix button sizes on mobile */
+/* Improved touch targets for mobile */
 @media (max-width: 640px) {
-  button, .btn {
+  button, 
+  .btn,
+  a,
+  input,
+  select {
     min-height: 44px;
     min-width: 44px;
+    padding: 0.5rem 1rem;
+  }
+  
+  input,
+  select {
+    font-size: 16px; /* Prevent zoom on iOS */
   }
 }
 
@@ -42,4 +74,5 @@ body {
 img {
   max-width: 100%;
   height: auto;
+  display: block;
 }

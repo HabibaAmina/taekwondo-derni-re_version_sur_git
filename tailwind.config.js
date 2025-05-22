@@ -39,11 +39,18 @@ export default {
         }
       },
       screens: {
-        'sm': '640px', // Mobile
-        'md': '768px', // Tablette
+        'xs': '375px',  // Petit mobile
+        'sm': '640px',  // Mobile
+        'md': '768px',  // Tablette
         'lg': '1024px', // Ordinateur portable
         'xl': '1280px', // Grand écran
         '2xl': '1536px', // Très grand écran
+      },
+      maxWidth: {
+        'container-sm': '640px',
+        'container-md': '768px',
+        'container-lg': '1024px',
+        'container-xl': '1280px',
       },
     },
   },

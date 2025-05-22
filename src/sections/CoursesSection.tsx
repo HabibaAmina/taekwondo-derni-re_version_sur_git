@@ -43,7 +43,7 @@ const CourseCard = ({
   return (
     <motion.div
       ref={ref}
-      className={`bg-white rounded-lg shadow-md overflow-hidden border-t-4 ${color} h-full flex flex-col`}
+      className={`bg-white rounded-lg shadow-md overflow-hidden border-t-4 ${color} h-full flex flex-col w-full max-w-sm mx-auto sm:max-w-none`}
       initial={{ opacity: 0, y: 50 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay }}
@@ -238,7 +238,7 @@ const CoursesSection = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {courses.slice(0, 4).map((course, index) => (
             <CourseCard
               key={index}
