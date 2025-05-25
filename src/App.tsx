@@ -1,0 +1,242 @@
+import { useEffect, useState, useRef, useCallback } from 'react';
+import './index.css';
+
+// Components
+import Navbar from './components/Navbar';
+import ShoppingCart from './components/ShoppingCart';
+import HeroSection from './sections/HeroSection';
+import CoursesSection from './sections/CoursesSection';
+import ClubsSection from './sections/ClubsSection';
+import GallerySection from './sections/GallerySection';
+import ShopSection from './sections/ShopSection';
+import RegistrationSection from './sections/RegistrationSection';
+import TrialSection from './sections/TrialSection';
+import InfoGraphicsSection from './sections/InfoGraphicsSection';
+import AboutUsSection from './sections/AboutUsSection';
+import FaqSection from './sections/FaqSection';
+import ContactSection from './sections/ContactSection';
+import Footer from './components/Footer';
+import SocialProofNotification from './components/SocialProofNotification';
+import PricingSection from './sections/PricingSection';
+
+export function App() {
+  const [scrollY, setScrollY] = useState(0);
+  const [showNotification, setShowNotification] = useState(false);
+  const [currentNotification, setCurrentNotification] = useState({ name: '', action: '', location: '' });
+
+  // State for Shopping Cart
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [cartItemCount, setCartItemCount] = useState(0);
+
+  // Refs for scroll navigation
+  const coursesRef = useRef<HTMLDivElement>(null);
+  const clubsRef = useRef<HTMLDivElement>(null);
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const shopRef = useRef<HTMLDivElement>(null);
+  const registrationRef = useRef<HTMLDivElement>(null);
+  const trialRef = useRef<HTMLDivElement>(null);
+  const contactRef = useRef<HTMLDivElement>(null);
+  const pricingRef = useRef<HTMLDivElement>(null);
+  
+  // Destructure refs for easier access in JSX
+  const sectionRefs = { coursesRef, clubsRef, galleryRef, shopRef, registrationRef, trialRef, contactRef, pricingRef };
+
+  // Load fonts
+  useEffect(() => {
+    const montserratLink = document.createElement('link');
+    montserratLink.href = 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap';
+    montserratLink.rel = 'stylesheet';
+    document.head.appendChild(montserratLink);
+
+    const interLink = document.createElement('link');
+    interLink.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap';
+    interLink.rel = 'stylesheet';
+    document.head.appendChild(interLink);
+
+    return () => {
+      document.head.removeChild(montserratLink);
+      document.head.removeChild(interLink);
+    };
+  }, []);
+
+  // Handle scroll event
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Random social proof notifications
+  useEffect(() => {
+    const notifications = [
+      { name: 'Sophie M.', action: 'vient de s\'inscrire au cours Baby', location: 'Club de Les Ulis' },
+      { name: 'Lucas K.', action: 'vient d\'acheter un dobok', location: 'Club de Longjumeau' },
+      { name: 'Emma D.', action: 'vient de réserver un cours d\'essai', location: 'Club de Palaiseau' },
+      { name: 'Thomas L.', action: 'vient de s\'inscrire au cours Adultes', location: 'Club de Saint-Remy' },
+      { name: 'Chloé B.', action: 'vient d\'acheter des protections', location: 'Club de Magny' },
+    ];
+
+    const interval = setInterval(() => {
+      if (Math.random() > 0.3) {
+        const randomNotification = notifications[Math.floor(Math.random() * notifications.length)];
+        setCurrentNotification(randomNotification);
+        setShowNotification(true);
+        
+        setTimeout(() => setShowNotification(false), 5000);
+      }
+    }, 12000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Scroll to section handler
+  const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
+    if (ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  // Toggle cart visibility
+  const toggleCart = () => {
+    setIsCartOpen(!isCartOpen);
+  };
+
+  // Update cart item count
+  const updateCartItemCount = useCallback((count: number) => {
+    setCartItemCount(count);
+  }, [setCartItemCount]);
+
+  return (
+    <div className="bg-background text-primary scroll-smooth">
+      {/* Main Navbar (fixed at top) */}
+      <Navbar 
+        scrollY={scrollY}
+        scrollToSection={scrollToSection}
+        refs={sectionRefs}
+        toggleCart={toggleCart}
+        cartItemCount={cartItemCount}
+      />
+      
+      <main>
+        <HeroSection 
+          scrollToSection={scrollToSection} 
+          refs={{ coursesRef, clubsRef, registrationRef }}
+        />
+        
+        <AboutUsSection />
+        
+        <div ref={coursesRef}>
+          <CoursesSection />
+        </div>
+        
+        <div ref={clubsRef}>
+          <ClubsSection trialRef={trialRef} scrollToSection={scrollToSection} />
+        </div>
+        
+        <div ref={galleryRef}>
+          <GallerySection />
+        </div>
+        
+        <div ref={shopRef}>
+          <ShopSection />
+        </div>
+        
+        <InfoGraphicsSection />
+        
+        <div ref={trialRef}>
+          <TrialSection />
+        </div>
+        
+        <div ref={pricingRef}>
+          <PricingSection />
+        </div>
+        
+        <div ref={registrationRef}>
+          <RegistrationSection />
+        </div>
+        
+        <FaqSection />
+
+        <div ref={contactRef}>
+          <ContactSection />
+        </div>
+      </main>
+      
+      <Footer 
+        scrollToSection={scrollToSection}
+        refs={sectionRefs}
+      />
+      
+      {/* Shopping Cart Panel (fixed on the side) */}
+      <ShoppingCart 
+        isOpen={isCartOpen}
+        toggleCart={toggleCart}
+        updateCartItemCount={updateCartItemCount}
+      />
+      
+      {showNotification && (
+        <SocialProofNotification 
+          name={currentNotification.name}
+          action={currentNotification.action}
+          location={currentNotification.location}
+        />
+      )}
+
+      {/* Mobile fixed footer navigation - Moved here from Navbar */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg flex justify-around items-center z-40">
+        <button
+          className="p-3 flex flex-col items-center justify-center text-xs"
+          onClick={() => scrollToSection(coursesRef)}
+        >
+          <span className="text-secondary text-lg mb-1">📚</span>
+          <span>Cours</span>
+        </button>
+        <button
+          className="p-3 flex flex-col items-center justify-center text-xs"
+          onClick={() => scrollToSection(clubsRef)}
+        >
+          <span className="text-secondary text-lg mb-1">🏢</span>
+          <span>Clubs</span>
+        </button>
+        <button
+          className="p-3 flex flex-col items-center justify-center text-xs"
+          onClick={() => scrollToSection(shopRef)}
+        >
+          <span className="text-secondary text-lg mb-1">🛒</span>
+          <span>Boutique</span>
+        </button>
+        <button
+          className="p-3 flex flex-col items-center justify-center text-xs"
+          onClick={() => scrollToSection(registrationRef)}
+        >
+          <span className="text-secondary text-lg mb-1">✍️</span>
+          <span>Inscription</span>
+        </button>
+
+        {/* Shopping Cart Icon in Mobile Footer */}
+        <button
+          className="p-3 flex flex-col items-center justify-center text-xs relative"
+          onClick={() => scrollToSection(pricingRef)}
+        >
+          <span className="text-secondary text-lg mb-1">💰</span>
+          <span>Nos Tarifs</span>
+        </button>
+
+        {/* Cours d'essai Icon in Mobile Footer - Added */}
+        <button
+          className="p-3 flex flex-col items-center justify-center text-xs relative"
+          onClick={() => scrollToSection(trialRef)}
+        >
+          <span className="text-secondary text-lg mb-1">📝</span>
+          <span>Cours d'essai</span>
+        </button>
+
+      </div>
+    </div>
+  );
+}
+
+export default App;

@@ -1,0 +1,58 @@
+<!-- Section commune à tous les types de messages -->
+<h2 style="color: #2c3e50;">Confirmation de votre demande</h2>
+<p>Bonjour {{to_name}},</p>
+
+<!-- Section pour les demandes de contact -->
+{{#type_contact}}
+<p>Nous avons bien reçu votre message concernant <strong>"{{subject}}"</strong>.</p>
+<p>Notre équipe va l'examiner et vous répondra dans les plus brefs délais.</p>
+
+<p>Pour rappel, voici votre message :</p>
+<div style="border: 1px solid #ccc; padding: 10px; margin: 10px 0; background-color: #f9f9f9;">
+  {{{original_message}}}
+</div>
+{{/type_contact}}
+
+<!-- Section pour les demandes de cours d'essai -->
+{{#type_cours_essai}}
+<p>Nous avons bien enregistré votre demande de cours d'essai. Voici les détails de votre réservation :</p>
+<ul>
+  <li><strong>Club :</strong> {{club}}</li>
+  <li><strong>Type de cours :</strong> {{course_type}}</li>
+  <li><strong>Date :</strong> {{date}}</li>
+  <li><strong>Horaire :</strong> {{time}}</li>
+</ul>
+<p>✅ Présentez-vous simplement à la séance choisie, à la date et à l'horaire indiqués. Aucune confirmation supplémentaire n'est nécessaire.</p>
+{{/type_cours_essai}}
+
+<!-- Section pour les demandes d'inscription -->
+{{#type_inscription}}
+<p>Nous avons bien reçu votre demande de pré-inscription.</p>
+<p>Votre place est réservée. Veuillez trouver ci-dessous la fiche récapitulative de votre pré-inscription :</p>
+
+<!-- La fiche d'inscription HTML générée est incluse ici -->
+<div style="margin-top: 20px;">
+  {{{fiche_html}}}
+</div>
+
+<p style="color: #d9534f; margin-top: 20px;">Pour finaliser votre inscription, veuillez télécharger le dossier complet sur notre site et le remettre au club.</p>
+{{/type_inscription}}
+
+<!-- Section pour les commandes de la boutique -->
+{{#type_commande}}
+<p>Nous avons bien reçu votre commande et nous vous en remercions.</p>
+<p>Voici le récapitulatif de votre commande :</p>
+<ul>
+  {{#items}}
+  <li>{{quantity}}x {{name}} - {{price}}€</li>
+  {{/items}}
+</ul>
+<p><strong>Total :</strong> {{total}}€</p>
+
+<p><strong>💳 Pour valider votre commande, le règlement est à effectuer directement au Club (espèces, chèque ou ANCV).</strong></p>
+<p><strong>📦 Vous pourrez récupérer votre commande au Club dès que les produits seront disponibles. Nous vous tiendrons informé(e) dès qu'elle sera prête.</strong></p>
+{{/type_commande}}
+
+<!-- Section commune de fin -->
+<p style="margin-top: 30px;">Merci de votre intérêt pour l'Académie de Taekwondo Pluriel.</p>
+<p>Cordialement,<br>L'équipe ATP</p> 
