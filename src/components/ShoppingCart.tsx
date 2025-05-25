@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaShoppingCart, FaTimes, FaTrash, FaPlus, FaMinus, FaArrowLeft, FaCheck, FaUser, FaPhone, FaCalendarAlt, FaMapMarkerAlt, FaEnvelope } from 'react-icons/fa';
+import { FaTimes, FaTrash, FaPlus, FaMinus, FaArrowLeft, FaCheck } from 'react-icons/fa';
 import emailjs from '@emailjs/browser';
 
 interface CartItem {
@@ -156,11 +156,6 @@ const ShoppingCart = ({ isOpen, toggleCart, updateCartItemCount }: ShoppingCartP
   // Go to next step
   const goToNextStep = () => {
     setCheckoutStep(prev => prev + 1);
-  };
-
-  // Go to previous step
-  const goToPreviousStep = () => {
-    setCheckoutStep(prev => Math.max(1, prev - 1));
   };
 
   // Validate customer info form

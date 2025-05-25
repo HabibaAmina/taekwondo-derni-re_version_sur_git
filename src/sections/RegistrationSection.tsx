@@ -3,7 +3,6 @@ import emailjs from '@emailjs/browser';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { FaUserAlt, FaEnvelope, FaPhone, FaCalendarAlt, FaMapMarkerAlt, FaCheckCircle, FaIdCard, FaFileMedical, FaHome, FaMoneyBillWave } from 'react-icons/fa';
-import { jsPDF } from 'jspdf';
 
 const RegistrationSection = () => {
   const [ref, inView] = useInView({
@@ -210,53 +209,6 @@ const RegistrationSection = () => {
         </body>
       </html>
     `;
-  };
-
-  const generateFichePdfBase64 = () => {
-    const doc = new jsPDF();
-    doc.setFillColor('#3498DB');
-    doc.rect(0, 0, 210, 25, 'F');
-    doc.setTextColor('#fff');
-    doc.setFontSize(22);
-    doc.text('Académie Taekwondo Pluriel', 105, 15, { align: 'center' });
-    doc.setFontSize(14);
-    doc.setTextColor('#222');
-    doc.text('Fiche d\'inscription', 105, 28, { align: 'center' });
-
-    let y = 40;
-    doc.setFontSize(12);
-    doc.setTextColor('#3498DB');
-    doc.text('Informations du pratiquant', 10, y);
-    y += 8;
-    doc.setTextColor('#222');
-    doc.text(`Nom : ${formState.lastName}`, 10, y); y += 7;
-    doc.text(`Prénom : ${formState.firstName}`, 10, y); y += 7;
-    doc.text(`Date de naissance : ${formState.birthDate}`, 10, y); y += 7;
-    doc.text(`Email : ${formState.email}`, 10, y); y += 7;
-    doc.text(`Téléphone : ${formState.phone}`, 10, y); y += 7;
-    doc.text(`Club choisi : ${clubs.find(c => c.id === formState.club)?.name || ''}`, 10, y); y += 7;
-    doc.text(`Type de cours : ${courseTypes.find(c => c.id === formState.courseType)?.name || ''}`, 10, y); y += 7;
-    doc.text(`Date de la demande : ${new Date().toLocaleDateString('fr-FR')}`, 10, y); y += 12;
-
-    doc.setTextColor('#3498DB');
-    doc.text('Documents à fournir', 10, y); y += 8;
-    doc.setTextColor('#222');
-    doc.text('- Pièce d\'identité', 10, y); y += 7;
-    doc.text('- Certificat médical (moins de 3 mois, apte au Taekwondo)', 10, y); y += 7;
-    doc.text('- Justificatif de domicile', 10, y); y += 7;
-    doc.text('- Photo d\'identité', 10, y); y += 7;
-    doc.text('- Règlement (chèque, espèces, CB)', 10, y); y += 14;
-
-    doc.setTextColor('#3498DB');
-    doc.text('Signature du responsable légal :', 10, y); y += 20;
-    doc.setDrawColor('#888');
-    doc.line(10, y, 100, y);
-
-    doc.setFontSize(10);
-    doc.setTextColor('#888');
-    doc.text('Merci d\'apporter cette fiche complétée et les documents au club lors de votre inscription définitive.', 10, y + 15);
-
-    return doc.output('datauristring');
   };
 
   return (
