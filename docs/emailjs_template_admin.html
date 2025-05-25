@@ -1,0 +1,57 @@
+<!-- Section commune à tous les types de messages -->
+<h2 style="color: #2c3e50;">Nouvelle demande reçue</h2>
+<p><strong>Nom :</strong> {{from_name}}</p>
+<p><strong>Email :</strong> {{from_email}}</p>
+<br>
+
+<!-- Section pour les demandes de contact -->
+{{#type_contact}}
+<h3 style="color: #2980b9;">Demande de contact</h3>
+<p><strong>Sujet :</strong> {{subject}}</p>
+<p><strong>Message :</strong></p>
+<div style="border: 1px solid #ccc; padding: 10px; margin: 10px 0; background-color: #f9f9f9;">
+  {{{message}}}
+</div>
+{{/type_contact}}
+
+<!-- Section pour les demandes de cours d'essai -->
+{{#type_cours_essai}}
+<h3 style="color: #2980b9;">Demande de cours d'essai</h3>
+<p>Une nouvelle demande de cours d'essai a été enregistrée avec les informations suivantes :</p>
+<ul>
+  <li><strong>Téléphone :</strong> {{phone}}</li>
+  <li><strong>Date de naissance :</strong> {{birth_date}}</li>
+  <li><strong>Club choisi :</strong> {{club}}</li>
+  <li><strong>Type de cours :</strong> {{course_type}}</li>
+  <li><strong>Date souhaitée :</strong> {{date}}</li>
+  <li><strong>Horaire :</strong> {{time}}</li>
+</ul>
+<p style="color: #7f8c8d;">ℹ️ Le client est invité à se présenter directement au cours à la date et l'horaire choisis. Aucun contact n'est nécessaire.</p>
+{{/type_cours_essai}}
+
+<!-- Section pour les demandes d'inscription -->
+{{#type_inscription}}
+<h3 style="color: #2980b9;">Demande de pré-inscription</h3>
+<p>Une nouvelle demande de pré-inscription a été soumise. La fiche HTML générée ci-dessous contient les détails de la pré-réservation de place :</p>
+
+<!-- La fiche d'inscription HTML générée est incluse ici -->
+<div style="margin-top: 20px;">
+  {{{fiche_html}}}
+</div>
+
+<p style="color: #d9534f; margin-top: 20px;">⚠️ Rappel : Le client devra télécharger le dossier complet sur le site et le remettre au club pour valider définitivement l'inscription.</p>
+{{/type_inscription}}
+
+<!-- Section pour les commandes de la boutique -->
+{{#type_commande}}
+<h3 style="color: #2980b9;">Nouvelle commande boutique</h3>
+<p>Une nouvelle commande a été passée avec les articles suivants :</p>
+<ul>
+  {{#items}}
+  <li>{{quantity}}x {{name}} - {{price}}€</li>
+  {{/items}}
+</ul>
+<p><strong>Total :</strong> {{total}}€</p>
+<p style="color: #7f8c8d;">💳 Le client a été informé qu'il doit régler sa commande au club (espèces, chèque ou ANCV).</p>
+<p style="color: #7f8c8d;">📦 La commande sera à retirer sur place dès disponibilité. Un message sera envoyé au client dès que le produit est prêt.</p>
+{{/type_commande}} 

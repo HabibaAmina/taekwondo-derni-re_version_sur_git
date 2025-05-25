@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import logoAtp from '../assets/logo-atp.png.png';
 
 const Logo = () => {
   const scrollToTop = () => {
@@ -17,11 +18,14 @@ const Logo = () => {
       role="button"
       aria-label="Retour en haut de la page"
     >
-      <div className="h-10 w-10 flex items-center justify-center mr-2 bg-primary rounded-full">
-        <span className="text-white font-display font-bold text-lg">ATP</span>
-      </div>
+      <img
+        src={logoAtp}
+        alt="Logo ATP"
+        className="h-12 w-12 object-contain mr-3 bg-white rounded-full shadow"
+        style={{ background: '#fff' }}
+      />
       <div className="font-display font-bold text-lg text-primary">
-        Académie<span className="text-secondary">Taekwondo</span>
+        Académie<span className="text-secondary"> Taekwondo</span>
       </div>
     </motion.div>
   );

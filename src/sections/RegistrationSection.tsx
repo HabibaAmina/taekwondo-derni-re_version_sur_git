@@ -3,6 +3,7 @@ import emailjs from '@emailjs/browser';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { FaUserAlt, FaEnvelope, FaPhone, FaCalendarAlt, FaMapMarkerAlt, FaCheckCircle, FaIdCard, FaFileMedical, FaHome, FaMoneyBillWave } from 'react-icons/fa';
+import { jsPDF } from 'jspdf';
 
 const RegistrationSection = () => {
   const [ref, inView] = useInView({
@@ -58,7 +59,8 @@ const RegistrationSection = () => {
             to_email: 'zineb2019achraf@gmail.com',
             type_inscription: true,
             type_cours_essai: false,
-            type_contact: false
+            type_contact: false,
+            fiche_html: generateFicheHtml()
           },
           'QccHq6PD1Uo3jsZHm'
         );
@@ -73,7 +75,8 @@ const RegistrationSection = () => {
             course_type: selectedCourseObj ? selectedCourseObj.name : formState.courseType,
             type_inscription: true,
             type_cours_essai: false,
-            type_contact: false
+            type_contact: false,
+            fiche_html: generateFicheHtml()
           },
           'QccHq6PD1Uo3jsZHm'
         );
@@ -96,12 +99,12 @@ const RegistrationSection = () => {
 
   // Club options
   const clubs = [
-    { id: 'villebon', name: 'ATP Villebon-sur-Yvette' },
-    { id: 'palaiseau', name: 'ATP Palaiseau' },
-    { id: 'longjumeau', name: 'ATP Longjumeau' },
-    { id: 'saint-remy', name: 'ATP Saint-Rémy-lès-Chevreuse' },
-    { id: 'magny', name: 'ATP Magny-les-Hameaux' },
-    { id: 'ulis', name: 'ATP Les Ulis' },
+    { id: 'villebon', name: 'ATP Villebon-sur-Yvette', pdfFile: 'bulletin-adhesion-coming-soon.pdf', docxFile: 'bulletin-adhesion-coming-soon.docx' },
+    { id: 'palaiseau', name: 'ATP Palaiseau', pdfFile: 'bulletin-adhesion-coming-soon.pdf', docxFile: 'bulletin-adhesion-coming-soon.docx' },
+    { id: 'longjumeau', name: 'ATP Longjumeau', pdfFile: 'bulletin-adhesion-coming-soon.pdf', docxFile: 'bulletin-adhesion-coming-soon.docx' },
+    { id: 'saint-remy', name: 'ATP Saint-Rémy-lès-Chevreuse', pdfFile: 'bulletin-adhesion-coming-soon.pdf', docxFile: 'bulletin-adhesion-coming-soon.docx' },
+    { id: 'magny', name: 'ATP Magny-les-Hameaux', pdfFile: 'bulletin-adhesion-coming-soon.pdf', docxFile: 'bulletin-adhesion-coming-soon.docx' },
+    { id: 'ulis', name: 'ATP Les Ulis', pdfFile: 'fiche d\'inscription cou taekwondo 2024 2025.pdf', docxFile: 'fiche d\'inscription cou taekwondo 2024 2025.docx' },
   ];
 
   // Course type options
@@ -133,6 +136,129 @@ const RegistrationSection = () => {
     }
   };
 
+  const generateFicheHtml = () => {
+    const currentYear = new Date().getFullYear();
+    const startSeasonYear = currentYear;
+    const endSeasonYear = currentYear + 1;
+    const seasonYear = `${startSeasonYear}-${endSeasonYear}`;
+
+    return `
+      <html>
+        <head>
+          <meta charset="UTF-8" />
+          <title>Fiche d'inscription ATP</title>
+          <style>
+            @media print {
+              body { background: #fff !important; }
+              .main { box-shadow: none !important; }
+              .print-btn { display: none !important; }
+            }
+            body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; color: #222; background: #f7f9fa; }
+            .header { background: linear-gradient(90deg, #3498DB 60%, #e63946 100%); color: #fff; padding: 32px 0 24px 0; text-align: center; }
+            .logo-atp { display: inline-block; vertical-align: middle; margin-bottom: 8px; }
+            .main { background: #fff; max-width: 700px; margin: 32px auto; border-radius: 12px; box-shadow: 0 2px 12px #0001; padding: 32px 40px; }
+            h2 { color: #3498DB; margin-top: 0; }
+            .section { margin-bottom: 28px; }
+            .label { font-weight: bold; color: #3498DB; }
+            ul { margin: 0; padding-left: 20px; }
+            .signature { margin-top: 40px; }
+            .footer { text-align: center; color: #888; font-size: 0.95em; margin-top: 32px; }
+            .print-btn { display: block; margin: 24px auto 0 auto; background: #3498DB; color: #fff; border: none; border-radius: 6px; padding: 10px 28px; font-size: 1.1em; cursor: pointer; box-shadow: 0 2px 8px #0002; transition: background 0.2s; }
+            .print-btn:hover { background: #217dbb; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <span class="logo-atp">
+              <img src="https://i.ibb.co/k2MdCpxp/Logo-ATP.png" alt="Logo ATP" style="width: 70px; vertical-align: middle; border-radius: 50%; box-shadow: 0 2px 8px #0003; background: #fff;" />
+            </span>
+            <div style="font-size:1.7em; font-weight:bold; letter-spacing:2px;">Académie Taekwondo Pluriel</div>
+            <div style="font-size:1.1em; margin-top:4px;">Fiche de Pré-inscription - Saison ${seasonYear}</div>
+          </div>
+          <div class="main">
+            <h2>Informations du pratiquant</h2>
+            <div class="section">
+              <span class="label">Nom :</span> ${formState.lastName}<br/>
+              <span class="label">Prénom :</span> ${formState.firstName}<br/>
+              <span class="label">Date de naissance :</span> ${formState.birthDate}<br/>
+              <span class="label">Email :</span> ${formState.email}<br/>
+              <span class="label">Téléphone :</span> ${formState.phone}<br/>
+              <span class="label">Club choisi :</span> ${clubs.find(c => c.id === formState.club)?.name || ''}<br/>
+              <span class="label">Type de cours :</span> ${courseTypes.find(c => c.id === formState.courseType)?.name || ''}<br/>
+              <span class="label">Date de la demande :</span> ${new Date().toLocaleDateString('fr-FR')}
+            </div>
+            <h2>Documents à fournir</h2>
+            <div class="section">
+              <ul>
+                <li>Pièce d'identité</li>
+                <li>Certificat médical (moins de 3 mois, apte au Taekwondo)</li>
+                <li>Justificatif de domicile</li>
+                <li>Photo d'identité</li>
+                <li>Règlement (chèque, espèces, CB)</li>
+              </ul>
+            </div>
+            <div class="signature">
+              <span class="label">Signature du responsable légal :</span>
+              <div style="height:60px; border-bottom:1px solid #888; width:300px; margin-top:16px;"></div>
+            </div>
+            <button class="print-btn" onclick="window.print()">Imprimer cette fiche</button>
+          </div>
+          <div class="footer">
+            Merci d'apporter cette fiche complétée et les documents au club lors de votre inscription définitive.<br/>
+            <span style="color:#e63946; font-weight:bold;">ATP</span> – Académie Taekwondo Pluriel
+          </div>
+        </body>
+      </html>
+    `;
+  };
+
+  const generateFichePdfBase64 = () => {
+    const doc = new jsPDF();
+    doc.setFillColor('#3498DB');
+    doc.rect(0, 0, 210, 25, 'F');
+    doc.setTextColor('#fff');
+    doc.setFontSize(22);
+    doc.text('Académie Taekwondo Pluriel', 105, 15, { align: 'center' });
+    doc.setFontSize(14);
+    doc.setTextColor('#222');
+    doc.text('Fiche d\'inscription', 105, 28, { align: 'center' });
+
+    let y = 40;
+    doc.setFontSize(12);
+    doc.setTextColor('#3498DB');
+    doc.text('Informations du pratiquant', 10, y);
+    y += 8;
+    doc.setTextColor('#222');
+    doc.text(`Nom : ${formState.lastName}`, 10, y); y += 7;
+    doc.text(`Prénom : ${formState.firstName}`, 10, y); y += 7;
+    doc.text(`Date de naissance : ${formState.birthDate}`, 10, y); y += 7;
+    doc.text(`Email : ${formState.email}`, 10, y); y += 7;
+    doc.text(`Téléphone : ${formState.phone}`, 10, y); y += 7;
+    doc.text(`Club choisi : ${clubs.find(c => c.id === formState.club)?.name || ''}`, 10, y); y += 7;
+    doc.text(`Type de cours : ${courseTypes.find(c => c.id === formState.courseType)?.name || ''}`, 10, y); y += 7;
+    doc.text(`Date de la demande : ${new Date().toLocaleDateString('fr-FR')}`, 10, y); y += 12;
+
+    doc.setTextColor('#3498DB');
+    doc.text('Documents à fournir', 10, y); y += 8;
+    doc.setTextColor('#222');
+    doc.text('- Pièce d\'identité', 10, y); y += 7;
+    doc.text('- Certificat médical (moins de 3 mois, apte au Taekwondo)', 10, y); y += 7;
+    doc.text('- Justificatif de domicile', 10, y); y += 7;
+    doc.text('- Photo d\'identité', 10, y); y += 7;
+    doc.text('- Règlement (chèque, espèces, CB)', 10, y); y += 14;
+
+    doc.setTextColor('#3498DB');
+    doc.text('Signature du responsable légal :', 10, y); y += 20;
+    doc.setDrawColor('#888');
+    doc.line(10, y, 100, y);
+
+    doc.setFontSize(10);
+    doc.setTextColor('#888');
+    doc.text('Merci d\'apporter cette fiche complétée et les documents au club lors de votre inscription définitive.', 10, y + 15);
+
+    return doc.output('datauristring');
+  };
+
   return (
     <section className="py-20 bg-primary text-white" id="registration">
       <div className="container mx-auto px-4">
@@ -143,11 +269,10 @@ const RegistrationSection = () => {
           animate={inView ? { opacity: 1 } : {}}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">Inscription</h2>
+          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">Pré-inscription</h2>
           <div className="w-20 h-1 bg-secondary mx-auto mb-6"></div>
           <p className="text-gray-300 max-w-2xl mx-auto">
-            Rejoignez l'Académie de Taekwondo Pluriel et commencez votre parcours vers l'excellence. 
-            Remplissez le formulaire ci-dessous pour vous inscrire à nos cours.
+            Bloquez votre place en vous pré-inscrivant en ligne. Une fois votre pré-inscription validée, vous pourrez télécharger le dossier complet à nous remettre.
           </p>
         </motion.div>
         
@@ -415,32 +540,84 @@ const RegistrationSection = () => {
                   <div className="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
                     <FaCheckCircle className="text-green-500 text-3xl" />
                   </div>
-                  <h3 className="text-2xl font-bold mb-2">Inscription réussie!</h3>
+                  <h3 className="text-2xl font-bold mb-2">Pré-inscription réussie!</h3>
                   <p className="text-gray-600 mb-4">
-                    Merci {formState.firstName} pour votre inscription. Nous avons envoyé un email de confirmation à {formState.email}.
-                    Notre équipe vous contactera prochainement pour finaliser votre inscription.
+                    Merci {formState.firstName} pour votre pré-inscription. Nous avons réservé votre place et envoyé un email de confirmation à {formState.email}.
+                    Vous trouverez ci-dessous le dossier d'inscription complet à télécharger pour finaliser votre inscription.
                   </p>
+
+                  {/* Phrases motivantes */}
+                  <p className="text-gray-700 mb-6 font-semibold">
+                    Nous sommes heureux de vous voir motivé à rejoindre nos rangs !<br/>
+                    Suivez bien toutes les étapes du formulaire, vous n'êtes plus très loin de faire partie des nôtres !
+                  </p>
+
                   <div className="text-sm text-secondary mb-6 p-3 bg-secondary/10 rounded-lg">
-                    Vérifiez votre boîte de réception (et éventuellement vos spams) pour retrouver l'email de confirmation avec tous les détails sur votre inscription.
+                    Vérifiez votre boîte de réception (et éventuellement vos spams) pour retrouver l'email de confirmation de votre pré-inscription.
                   </div>
-                  <button
-                    className="px-6 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/90 transition-colors"
-                    onClick={() => {
-                      setSubmitted(false);
-                      setFormStep(0);
-                      setFormState({
-                        firstName: '',
-                        lastName: '',
-                        email: '',
-                        phone: '',
-                        birthDate: '',
-                        club: '',
-                        courseType: '',
-                      });
-                    }}
-                  >
-                    Nouvelle inscription
-                  </button>
+
+                  {/* Nouvelle section pour le téléchargement du dossier */}
+                  <div className="mt-8 pt-6 border-t border-gray-200">
+                    <h4 className="text-xl font-semibold mb-4">Dossier d'adhésion complet à télécharger</h4>
+                    <p className="text-gray-700 mb-4">
+                      Veuillez télécharger le bulletin d'adhésion complet ci-dessous. Remplissez-le et remettez-le au club pour valider définitivement votre inscription. Vous pouvez l'envoyer par email ou le déposer en personne lors des heures de cours.
+                    </p>
+                    {/* Conteneur pour les boutons de téléchargement */}
+                    <div className="flex flex-col items-center space-y-4">
+                      <a
+                        href={`/documents/${clubs.find(c => c.id === formState.club)?.pdfFile}`}
+                        download
+                        className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center w-full justify-center md:w-auto"
+                      >
+                        <FaFileMedical className="mr-2" /> Télécharger bulletin d'adhesion (PDF)
+                      </a>
+                      <a
+                        href={`/documents/${clubs.find(c => c.id === formState.club)?.docxFile}`}
+                        download
+                        className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center w-full justify-center md:w-auto"
+                      >
+                        <FaFileMedical className="mr-2" /> Télécharger bulletin d'adhesion (Word)
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Boutons d'action principaux */}
+                  <div className="flex flex-col items-center space-y-4 mt-6">
+                    <button
+                      className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors w-full justify-center md:w-auto"
+                      onClick={() => {
+                        // Générer la fiche d'inscription imprimable (justificatif de pré-inscription)
+                        const ficheWindow = window.open('', '_blank');
+                        if (ficheWindow) {
+                          const ficheHtmlContent = generateFicheHtml();
+                          ficheWindow.document.open();
+                          ficheWindow.document.write(ficheHtmlContent);
+                          ficheWindow.document.close();
+                        }
+                      }}
+                    >
+                      Consulter ma fiche de pré-inscription
+                    </button>
+
+                    <button
+                      className="px-6 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/90 transition-colors w-full justify-center md:w-auto"
+                      onClick={() => {
+                        setSubmitted(false);
+                        setFormStep(0);
+                        setFormState({
+                          firstName: '',
+                          lastName: '',
+                          email: '',
+                          phone: '',
+                          birthDate: '',
+                          club: '',
+                          courseType: '',
+                        });
+                      }}
+                    >
+                      Nouvelle pré-inscription
+                    </button>
+                  </div>
                 </motion.div>
               )}
             </div>

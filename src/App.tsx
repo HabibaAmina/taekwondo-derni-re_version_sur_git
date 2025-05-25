@@ -23,7 +23,7 @@ export function App() {
   const [scrollY, setScrollY] = useState(0);
   const [showNotification, setShowNotification] = useState(false);
   const [currentNotification, setCurrentNotification] = useState({ name: '', action: '', location: '' });
-  
+
   // Refs for scroll navigation
   const coursesRef = useRef<HTMLDivElement>(null);
   const clubsRef = useRef<HTMLDivElement>(null);
